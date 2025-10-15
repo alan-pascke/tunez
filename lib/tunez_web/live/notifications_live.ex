@@ -20,13 +20,13 @@ defmodule TunezWeb.NotificationsLive do
           </span> <span class="relative inline-flex rounded-full h-3 w-3 bg-error-600"></span>
         </span>
       </div>
-      
+
       <div id="notifications" class="z-10 hidden absolute top-10 right-0 bg">
         <div :if={@notifications == []} class="p-2 shadow bg-white rounded-lg w-52">
           <.icon name="hero-check-circle" class="w-8 h-8 bg-green-500" />
           <span class="text-sm px-2">No new notifications!</span>
         </div>
-        
+
         <ul
           :if={@notifications != []}
           tabindex="0"
@@ -46,7 +46,7 @@ defmodule TunezWeb.NotificationsLive do
                 has been added for {notification.album.artist.name}<br />
                 <span class="text-xs opacity-60">{time_ago_in_words(notification.inserted_at)}</span>
               </p>
-              
+
               <div class="h-16 w-16">
                 <.cover_image image={notification.album.cover_image_url} />
               </div>

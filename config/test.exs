@@ -8,7 +8,7 @@ config :ash, policies: [show_policy_breakdowns?: true], disable_async?: true
 # Run `mix help test` for more information.
 config :tunez, Tunez.Repo,
   username: "postgres",
-  password: "postgres",
+  password: "123456",
   hostname: "localhost",
   database: "tunez_test#{System.get_env("MIX_TEST_PARTITION")}",
   pool: Ecto.Adapters.SQL.Sandbox,

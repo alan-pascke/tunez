@@ -1,18 +1,15 @@
 defmodule TunezWeb.Artists.ShowLive do
   use TunezWeb, :live_view
 
+  alias Tunez.Music
   require Logger
 
   def mount(_params, _session, socket) do
     {:ok, socket}
   end
 
-  def handle_params(_params, _url, socket) do
-    artist = %{
-      id: "test-artist-1",
-      name: "Artist Name",
-      biography: "Sample biography content here"
-    }
+  def handle_params(%{"id" => artist_id}, _url, socket) do
+    artist = Music.get_artist_by_id!(artist_id)
 
     albums = [
       %{
@@ -39,7 +36,7 @@ defmodule TunezWeb.Artists.ShowLive do
         <.h1>
           {@artist.name}
         </.h1>
-        
+
         <:action>
           <.button_link
             kind="error"
@@ -50,20 +47,20 @@ defmodule TunezWeb.Artists.ShowLive do
             Delete Artist
           </.button_link>
         </:action>
-        
+
         <:action>
           <.button_link navigate={~p"/artists/#{@artist.id}/edit"} kind="primary" inverse>
             Edit Artist
           </.button_link>
         </:action>
       </.header>
-      
+
       <div class="mb-6">{formatted(@artist.biography)}</div>
-      
+
       <.button_link navigate={~p"/artists/#{@artist.id}/albums/new"} kind="primary">
         New Album
       </.button_link>
-      
+
       <ul class="mt-10 space-y-6 md:space-y-10">
         <li :for={album <- @albums}>
           <.album_details album={album} />
@@ -79,13 +76,13 @@ defmodule TunezWeb.Artists.ShowLive do
       <div class="mx-auto mb-6 md:mb-0 w-2/3 md:w-72 lg:w-96">
         <.cover_image image={@album.cover_image_url} />
       </div>
-      
+
       <div class="flex-1">
         <.header class="pl-3 pr-2 !m-0">
           <.h2>
             {@album.name} ({@album.year_released})
           </.h2>
-          
+
           <:action>
             <.button_link
               size="sm"
@@ -98,14 +95,14 @@ defmodule TunezWeb.Artists.ShowLive do
               Delete
             </.button_link>
           </:action>
-          
+
           <:action>
             <.button_link size="sm" kind="primary" inverse navigate={~p"/albums/#{@album.id}/edit"}>
               Edit
             </.button_link>
           </:action>
         </.header>
-         <.track_details tracks={[]} />
+        <.track_details tracks={[]} />
       </div>
     </div>
     """
@@ -118,9 +115,9 @@ defmodule TunezWeb.Artists.ShowLive do
         <th class="whitespace-nowrap w-1 p-3">
           {String.pad_leading("#{track.order}", 2, "0")}.
         </th>
-        
+
         <td class="p-3">{track.name}</td>
-        
+
         <td class="whitespace-nowrap w-1 text-right p-2">{track.duration_seconds}</td>
       </tr>
     </table>

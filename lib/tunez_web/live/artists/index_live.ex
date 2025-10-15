@@ -1,6 +1,8 @@
 defmodule TunezWeb.Artists.IndexLive do
   use TunezWeb, :live_view
 
+  alias Tunez.Music
+
   require Logger
 
   def mount(_params, _session, socket) do
@@ -12,11 +14,7 @@ defmodule TunezWeb.Artists.IndexLive do
   end
 
   def handle_params(_params, _url, socket) do
-    artists = [
-      %{id: "test-artist-1", name: "Test Artist 1"},
-      %{id: "test-artist-2", name: "Test Artist 2"},
-      %{id: "test-artist-3", name: "Test Artist 3"}
-    ]
+    artists = Music.read_artists!()
 
     socket =
       socket
@@ -30,19 +28,19 @@ defmodule TunezWeb.Artists.IndexLive do
     <Layouts.app {assigns}>
       <.header responsive={false}>
         <.h1>Artists</.h1>
-        
+
         <:action>
           <.button_link navigate={~p"/artists/new"} kind="primary">
             New Artist
           </.button_link>
         </:action>
       </.header>
-      
+
       <div :if={@artists == []} class="p-8 text-center">
         <.icon name="hero-face-frown" class="w-32 h-32 bg-gray-300" /> <br />
         No artist data to display!
       </div>
-      
+
       <ul class="gap-6 lg:gap-12 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
         <li :for={artist <- @artists}>
           <.artist_card artist={artist} />
@@ -107,7 +105,7 @@ defmodule TunezWeb.Artists.IndexLive do
       <.button_link data-role="previous-page" kind="primary" inverse>
         « Previous
       </.button_link>
-      
+
       <.button_link data-role="next-page" kind="primary" inverse>
         Next »
       </.button_link>

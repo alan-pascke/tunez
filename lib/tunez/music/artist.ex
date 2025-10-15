@@ -8,7 +8,7 @@ defmodule Tunez.Music.Artist do
 
   attributes do
     uuid_primary_key :id
-
+S
     attribute :name, :string do
       allow_nil? false
     end
@@ -17,4 +17,10 @@ defmodule Tunez.Music.Artist do
     create_timestamp :inserted_at
     update_timestamp :updated_at
   end
+
+  actions do
+    defaults [:create, :read, :update, :destroy]
+    default_accept [:name, :biography]
+  end
+
 end
