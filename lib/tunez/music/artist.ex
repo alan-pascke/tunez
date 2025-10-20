@@ -30,6 +30,8 @@ defmodule Tunez.Music.Artist do
       end
 
       filter expr(contains(name, ^arg(:query)))
+
+      pagination offset?: true, default_limit: 12
     end
   end
 
@@ -38,6 +40,7 @@ defmodule Tunez.Music.Artist do
 
     attribute :name, :string do
       allow_nil? false
+      public? true
     end
 
     attribute :biography, :string
@@ -46,13 +49,21 @@ defmodule Tunez.Music.Artist do
       default []
     end
 
-    create_timestamp :inserted_at
-    update_timestamp :updated_at
+    create_timestamp :inserted_at, public?: true
+    update_timestamp :updated_at, public?: true
   end
 
   relationships do
     has_many :albums, Tunez.Music.Album do
       sort year_released: :desc
     end
+  end
+
+  calculations do
+    calculate :years_ago, :integer, expr(2025 - year_released)
+
+    calculate :string_years_ago,
+              :string,
+              expr("wow, this was released " <> years_ago <> " years ago!")
   end
 end
